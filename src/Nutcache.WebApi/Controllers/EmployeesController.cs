@@ -9,11 +9,11 @@ namespace Nutcache.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EmployeeController : ControllerBase
+    public class EmployeesController : ControllerBase
     {
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
-        public EmployeeController(IMediator mediator, IMapper mapper)
+        public EmployeesController(IMediator mediator, IMapper mapper)
         {
             _mediator = mediator;
             _mapper = mapper;

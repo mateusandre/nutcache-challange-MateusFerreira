@@ -8,16 +8,18 @@ namespace Nutcache.Application.Validations
         public EmployeeDtoValidation()
         {
             RuleFor(x => x.Name).NotNull().NotEmpty();
-            RuleFor(x => x.BirthDate).NotNull();
+            RuleFor(x => x.BirthDate).NotNull().Must(date => !date.Equals(default(DateTime)));
             RuleFor(x => x.Gender).NotNull();
-            RuleFor(x => x.Email).EmailAddress().WithMessage("Please inform a valid E-mail.");
+            RuleFor(x => x.Email).NotNull().EmailAddress().WithMessage("Please inform a valid E-mail.");
             RuleFor(x => x.Cpf).Must(IsCpfValid).WithMessage("Please inform a valid CPF.");
-            RuleFor(x => x.StartDate).NotNull();
+            RuleFor(x => x.StartDate).NotNull().Must(date => !date.Equals(default(DateTime)));
             RuleFor(x => x.Team).IsInEnum();
         }
 
         private bool IsCpfValid(string item)
         {
+            if (string.IsNullOrWhiteSpace(item)) return false;
+
             int[] multiplicador1 = new int[9] { 10, 9, 8, 7, 6, 5, 4, 3, 2 };
             int[] multiplicador2 = new int[10] { 11, 10, 9, 8, 7, 6, 5, 4, 3, 2 };
 
