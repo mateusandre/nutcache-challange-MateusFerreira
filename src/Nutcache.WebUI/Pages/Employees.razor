@@ -1,0 +1,53 @@
+﻿@page "/employees"
+
+<PageTitle>Nutcache employees</PageTitle>
+
+@using Nutcache.WebUI.Data
+@using Nutcache.Application.DTO
+@inject EmployeeService EmployeeService
+
+<h1>Employees</h1>
+
+<p>List of employees from Nutcache.</p>
+
+<section>
+    <a href="/employees/create" class="btn btn-dark btn-lg">New Employee</a>
+</section>
+<br />
+@if (employees == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>E-mail</th>
+                <th>Start Date</th>
+                <th>Team</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var employee in employees)
+            {
+                <tr>
+                    <td>@employee.Name</td>
+                    <td>@employee.Email</td>
+                    <td>@employee.StartDate.ToShortDateString()</td>
+                    <td>@employee.Team</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private IEnumerable<EmployeeWithIdDto>? employees;
+
+    protected override async Task OnInitializedAsync()
+    {
+        employees = await EmployeeService.GetAllEmployeesAsync();
+    }
+}

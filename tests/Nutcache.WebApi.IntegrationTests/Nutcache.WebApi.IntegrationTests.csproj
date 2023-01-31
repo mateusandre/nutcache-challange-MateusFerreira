@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\Nutcache.WebApi\Nutcache.WebApi.csproj" />
+    <ProjectReference Include="..\..\src\Nutcache.WebApi\Nutcache.WebApi.csproj" />
   </ItemGroup>
 
 </Project>

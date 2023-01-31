@@ -2,11 +2,13 @@
 using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Nutcache.Application.DTO;
 using Nutcache.Application.Middlewares;
 using Nutcache.Application.Queries.Handlers;
 using Nutcache.Application.Validations;
+using Nutcache.Infra.Data;
 using Nutcache.Infra.Data.Repository;
 
 namespace Nutcache.Infra.IoC
@@ -20,6 +22,7 @@ namespace Nutcache.Infra.IoC
             services.AddAutoMapper(typeof(EmployeeDto));
             services.AddValidatorsFromAssemblyContaining<EmployeeDtoValidation>();
             services.AddFluentValidationAutoValidation();
+            services.AddDbContext<NutcacheContext>(opt => opt.UseInMemoryDatabase("Nutcache"));
         }
 
         public static void RegisterMiddlewares(this IApplicationBuilder app)

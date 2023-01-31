@@ -1,0 +1,60 @@
+﻿@using Nutcache.Application.DTO
+@inject NavigationManager NavigationManager
+
+<EditForm Model="@employee" OnValidSubmit="SaveEmployee">
+    <DataAnnotationsValidator/>
+
+    <div class="mb-3">
+        <label for="Name" class="form-label">Name</label>
+        <div class="col-md-4">
+            <InputText class="form-control" @bind-Value="employee.Name" />
+        </div>
+        <ValidationMessage For="@(() => employee.Name)" />
+    </div>
+
+    <div class="mb-3">
+        <label for="Name" class="form-label">Birth Date</label>
+        <div class="col-md-4">
+            <InputDate class="form-control" @bind-Value="employee.BirthDate" />
+        </div>
+        <ValidationMessage For="@(() => employee.BirthDate)" />
+    </div>
+
+    <div class="mb-3">
+        <label for="Name" class="form-label">Birth Date</label>
+        <div class="col-md-4">
+            <InputDate class="form-control" @bind-Value="employee.BirthDate" />
+        </div>
+        <ValidationMessage For="@(() => employee.BirthDate)" />
+    </div>
+
+    <div class="mb-3">
+        <label for="Name" class="form-label">Birth Date</label>
+        <div class="col-md-4">
+            <InputDate class="form-control" @bind-Value="employee.BirthDate" />
+        </div>
+        <ValidationMessage For="@(() => employee.BirthDate)" />
+    </div>
+
+    <div class="mb-3">
+        <label for="Name" class="form-label">Birth Date</label>
+        <div class="col-md-4">
+            <InputDate class="form-control" @bind-Value="employee.BirthDate" />
+        </div>
+        <ValidationMessage For="@(() => employee.BirthDate)" />
+    </div>
+</EditForm>
+
+@code {
+    protected EmployeeDto employee = new();
+    protected async Task SaveEmployee()
+    {
+        await Task.Run(() => true);
+        Cancel();
+    }
+
+    public void Cancel()
+    {
+        NavigationManager.NavigateTo("/fetchuserdetails");
+    }
+}
