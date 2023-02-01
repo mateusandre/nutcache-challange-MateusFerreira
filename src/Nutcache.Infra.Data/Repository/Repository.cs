@@ -39,7 +39,7 @@ namespace Nutcache.Infra.Data.Repository
 
         public async Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken)
         {
-            return await _context.Set<T>().ToListAsync(cancellationToken).ConfigureAwait(false);
+            return await _context.Set<T>().AsNoTracking().ToListAsync(cancellationToken).ConfigureAwait(false);
         }
 
         public async Task UpdateAsync(T entity, CancellationToken cancellationToken)

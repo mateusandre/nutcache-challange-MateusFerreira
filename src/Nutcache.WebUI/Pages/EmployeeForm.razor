@@ -1,0 +1,109 @@
+﻿@using Nutcache.WebUI.Data
+@using Nutcache.Application.DTO
+@using Nutcache.Domain.Enums
+@inject EmployeeService EmployeeService
+@inject NavigationManager NavigationManager
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">            
+            <EditForm Model="@Employee" OnValidSubmit="SaveEmployee">
+                <FluentValidationValidator />
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="Name" class="form-label">Name</label>
+                        <div class="col-md-12">
+                            <InputText class="form-control" @bind-Value="Employee.Name" />
+                        </div>
+                        <ValidationMessage For="@(() => Employee.Name)" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="Name" class="form-label">Birth Date</label>
+                        <div class="col-md-12">
+                            <InputDate class="form-control" @bind-Value="Employee.BirthDate" />
+                        </div>
+                        <ValidationMessage For="@(() => Employee.BirthDate)" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="Name" class="form-label">Gender</label>
+                        <div class="col-md-12">
+                            <InputSelect class="form-control" @bind-Value="Employee.Gender">
+                                <option value="">Select an option</option>
+                                <option value="@Gender.Male">@Gender.Male</option>
+                                <option value="@Gender.Female">@Gender.Female</option>
+                                <option value="@Gender.Other">@Gender.Other</option>
+                            </InputSelect>
+                        </div>
+                        <ValidationMessage For="@(() => Employee.Gender)" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="Name" class="form-label">E-mail</label>
+                        <div class="col-md-12">
+                            <input type="email" class="form-control" @bind-value="Employee.Email" />
+                        </div>
+                        <ValidationMessage For="@(() => Employee.Email)" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="Name" class="form-label">CPF</label>
+                        <div class="col-md-12">
+                            <InputText class="form-control" @bind-Value="Employee.Cpf" maxlength="14" />
+                        </div>
+                        <ValidationMessage For="@(() => Employee.Cpf)" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="Name" class="form-label">Start Date</label>
+                        <div class="col-md-12">
+                            <InputDate class="form-control" @bind-Value="Employee.StartDate" />
+                        </div>
+                        <ValidationMessage For="@(() => Employee.StartDate)" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="Name" class="form-label">Team</label>
+                        <div class="col-md-12">
+                            <InputSelect class="form-control" @bind-Value="Employee.Team">
+                                <option value="">Select an option</option>
+                                <option value="@Team.Mobile">@Team.Mobile</option>
+                                <option value="@Team.Frontend">@Team.Frontend</option>
+                                <option value="@Team.Backend">@Team.Backend</option>
+                            </InputSelect>
+                        </div>
+                        <ValidationMessage For="@(() => Employee.Gender)" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-dark">Save changes</button>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+@code {
+    [CascadingParameter]
+    protected EmployeeDto Employee { get; set; }
+    [CascadingParameter]
+    protected Guid? Id { get; set; }
+    protected async Task SaveEmployee()
+    {
+        await EmployeeService.SaveAsync(Employee, Id);
+        NavigationManager.NavigateTo("/", forceLoad: true);
+    }
+
+    protected override void OnInitialized()
+    {
+        Employee.BirthDate = Employee.BirthDate == default(DateTime) ? DateTime.Now : Employee.BirthDate;
+        Employee.StartDate = Employee.StartDate == default(DateTime) ? DateTime.Now : Employee.StartDate;
+    }
+}

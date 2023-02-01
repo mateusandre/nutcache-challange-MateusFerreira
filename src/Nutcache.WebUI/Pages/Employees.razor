@@ -1,17 +1,18 @@
-﻿@page "/employees"
+﻿@page "/"
 
 <PageTitle>Nutcache employees</PageTitle>
 
 @using Nutcache.WebUI.Data
 @using Nutcache.Application.DTO
 @inject EmployeeService EmployeeService
+@inject NavigationManager NavigationManager
 
 <h1>Employees</h1>
 
 <p>List of employees from Nutcache.</p>
 
 <section>
-    <a href="/employees/create" class="btn btn-dark btn-lg">New Employee</a>
+    <button data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-dark">New Employee</button>
 </section>
 <br />
 @if (employees == null)
@@ -23,6 +24,7 @@ else
     <table class="table">
         <thead>
             <tr>
+                <th>#</th>
                 <th>Name</th>
                 <th>E-mail</th>
                 <th>Start Date</th>
@@ -30,9 +32,20 @@ else
             </tr>
         </thead>
         <tbody>
+            @if (employees.Count() == 0)
+            {
+                <tr>
+                    <td colspan="5">You don't have any empoyee at the moment, feel free to create a new one clicking on the button above.</td>
+                </tr>
+            }
+
             @foreach (var employee in employees)
             {
                 <tr>
+                    <td>
+                        <button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#exampleModal" @onclick="() => SelectEmployee(employee.Id)">Edit</button>
+                        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" @onclick="() => SelectEmployee(employee.Id)">delete</button>
+                        </td>
                     <td>@employee.Name</td>
                     <td>@employee.Email</td>
                     <td>@employee.StartDate.ToShortDateString()</td>
@@ -41,13 +54,67 @@ else
             }
         </tbody>
     </table>
+
+    <CascadingValue Value="@Employee">
+        <CascadingValue Value="@Id">
+            <EmployeeForm />
+        </CascadingValue>
+    </CascadingValue>    
+
+    <!-- Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Do you want to delete this employee?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Name:</strong> @Employee?.Name</p>
+                    <p><strong>E-mail:</strong> @Employee?.Email</p>
+                    <p><strong>Start Date:</strong> @Employee?.StartDate.ToShortDateString()</p>
+                    <p><strong>Team:</strong> @Employee?.Team</p>
+                    <p></p>
+                    <p></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger" @onclick="() => DeleteEmployee()">Yes, delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
 }
 
 @code {
     private IEnumerable<EmployeeWithIdDto>? employees;
+    protected EmployeeDto? Employee = new();
+    protected Guid? Id = new();
 
     protected override async Task OnInitializedAsync()
     {
         employees = await EmployeeService.GetAllEmployeesAsync();
+    }
+
+    protected void SelectEmployee(Guid? id = null)
+    {
+        if (id is not null)
+        {
+            Employee = employees?.FirstOrDefault(x => x.Id == id);
+            Id = id;
+        }
+        else
+        {
+            Employee = new();
+        }
+    }
+
+    protected async Task DeleteEmployee()
+    {
+        if (Id is not null)
+        {
+            await EmployeeService.DeleteAsync((Guid)Id);
+            NavigationManager.NavigateTo("/", forceLoad: true);
+        }
     }
 }

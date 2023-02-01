@@ -11,7 +11,7 @@ namespace Nutcache.Application.Validations
             RuleFor(x => x.BirthDate).NotNull().Must(date => !date.Equals(default(DateTime)));
             RuleFor(x => x.Gender).NotNull();
             RuleFor(x => x.Email).NotNull().EmailAddress().WithMessage("Please inform a valid E-mail.");
-            RuleFor(x => x.Cpf).Must(IsCpfValid).WithMessage("Please inform a valid CPF.");
+            RuleFor(x => x.Cpf).MaximumLength(14).Must(IsCpfValid).WithMessage("Please inform a valid CPF.");
             RuleFor(x => x.StartDate).NotNull().Must(date => !date.Equals(default(DateTime)));
             RuleFor(x => x.Team).IsInEnum();
         }
