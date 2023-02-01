@@ -45,6 +45,7 @@ Now the application is avaliable  with these urls:
 
 ## How to execute the tests
 From root directory type the following commands:
+
 **Unit tests:**
 
      cd tests\Nutcache.Application.UnitTests
@@ -53,4 +54,4 @@ From root directory type the following commands:
 **Integration tests:**
 
     cd tests\Nutcache.WebApi.IntegrationTests
-     dotnet test
+    dotnet test
