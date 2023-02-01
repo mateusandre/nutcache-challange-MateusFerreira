@@ -7,20 +7,20 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["src/Nutcache.WebUI/Nutcache.WebUI.csproj", "src/Nutcache.WebUI/"]
+COPY ["src/Nutcache.WebApi/Nutcache.WebApi.csproj", "src/Nutcache.WebApi/"]
+COPY ["src/Nutcache.Infra.Data/Nutcache.Infra.Data.csproj", "src/Nutcache.Infra.Data/"]
+COPY ["src/Nutcache.Domain/Nutcache.Domain.csproj", "src/Nutcache.Domain/"]
 COPY ["src/Nutcache.Infra.IoC/Nutcache.Infra.IoC.csproj", "src/Nutcache.Infra.IoC/"]
 COPY ["src/Nutcache.Application/Nutcache.Application.csproj", "src/Nutcache.Application/"]
-COPY ["src/Nutcache.Domain/Nutcache.Domain.csproj", "src/Nutcache.Domain/"]
-COPY ["src/Nutcache.Infra.Data/Nutcache.Infra.Data.csproj", "src/Nutcache.Infra.Data/"]
-RUN dotnet restore "src/Nutcache.WebUI/Nutcache.WebUI.csproj"
+RUN dotnet restore "src/Nutcache.WebApi/Nutcache.WebApi.csproj"
 COPY . .
-WORKDIR "/src/src/Nutcache.WebUI"
-RUN dotnet build "Nutcache.WebUI.csproj" -c Release -o /app/build
+WORKDIR "/src/src/Nutcache.WebApi"
+RUN dotnet build "Nutcache.WebApi.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Nutcache.WebUI.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "Nutcache.WebApi.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Nutcache.WebUI.dll"]
+ENTRYPOINT ["dotnet", "Nutcache.WebApi.dll"]
