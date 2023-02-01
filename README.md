@@ -1,7 +1,7 @@
 
 # Nutcache challange
 
-This is a challange from the company Nutcache where i had to create a API and UI for employees CRUD oprations.
+This is a challange from the company Nutcache where i had to create an API and UI for employees CRUD oprations.
 
 ## Dependencies
 
